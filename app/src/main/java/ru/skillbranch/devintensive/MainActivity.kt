@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d("M_MainActivity", "onCreate")
 
         benderImage = iv_bender
         textTxt = tv_text
@@ -44,13 +45,38 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         sendBtn.setOnClickListener(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("M_MainActivity", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("M_MainActivity", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("M_MainActivity", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("M_MainActivity", "onStop")
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+        Log.d("M_MainActivity", "onSaveInstanceState")
 
-        Log.d("M_MainActivity", "onSaveInstanceState called")
         outState?.putString("STATUS", benderObj.status.name)
         outState?.putString("QUESTION", benderObj.question.name)
         Log.d("M_MainActivity", "onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("M_MainActivity", "onDestroy")
     }
 
     override fun onClick(v: View?) {
