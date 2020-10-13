@@ -19,7 +19,11 @@ class Bender(
             return "На этом все, вопросов больше нет" to status.color
         }
 
-        val isInvalid = question.isInvalid(answer)
+        val isInvalid =
+            if (answer.isEmpty())
+                null
+            else
+                question.hasInputError(answer)
 
         return if (isInvalid == null) {
             if (question.answers.contains(answer.toLowerCase())) {
@@ -59,7 +63,7 @@ class Bender(
         NAME("Как меня зовут?", listOf("бендер", "bender")) {
             override fun nextQuestion(): Question = PROFESSION
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 if (answer[0].isLowerCase())
                     return "Имя должно начинаться с заглавной буквы"
                 return null
@@ -68,7 +72,7 @@ class Bender(
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")) {
             override fun nextQuestion(): Question = MATERIAL
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 if (answer[0].isUpperCase())
                     return "Профессия должна начинаться со строчной буквы"
                 return null
@@ -77,7 +81,7 @@ class Bender(
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "metal", "iron", "wood")) {
             override fun nextQuestion(): Question = BDAY
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 if (answer.contains(Regex("[0-9]")))
                     return "Материал не должен содержать цифр"
                 return null
@@ -86,7 +90,7 @@ class Bender(
         BDAY("Когда меня создали?", listOf("2993")) {
             override fun nextQuestion(): Question = SERIAL
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 if (answer.contains(Regex("[^0-9]")))
                     return "Год моего рождения должен содержать только цифры"
                 return null
@@ -95,7 +99,7 @@ class Bender(
         SERIAL("Мой серийный номер?", listOf("2716057")) {
             override fun nextQuestion(): Question = IDLE
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 if (answer.length != 7 || answer.contains(Regex("[^0-9]")))
                     return "Серийный номер содержит только цифры, и их 7"
                 return null
@@ -104,12 +108,12 @@ class Bender(
         IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
 
-            override fun isInvalid(answer: String): String? {
+            override fun hasInputError(answer: String): String? {
                 return null
             }
         };
 
         abstract fun nextQuestion() : Question
-        abstract fun isInvalid(answer: String) : String?
+        abstract fun hasInputError(answer: String) : String?
     }
 }
